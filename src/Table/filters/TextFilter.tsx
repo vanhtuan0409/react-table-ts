@@ -25,9 +25,10 @@ export const fuzzyFilterFn = (
 
 interface Props {
   column: any;
+  gotoPage: (page: number) => void;
 }
 
-const TextFilter: React.FunctionComponent<Props> = ({ column }) => {
+const TextFilter: React.FunctionComponent<Props> = ({ column, gotoPage }) => {
   const { filterValue, setFilter } = column;
   return (
     <input
@@ -35,6 +36,7 @@ const TextFilter: React.FunctionComponent<Props> = ({ column }) => {
       placeholder="Enter search text"
       onChange={e => {
         setFilter(e.target.value || undefined);
+        gotoPage(0);
       }}
     />
   );

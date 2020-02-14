@@ -27,26 +27,52 @@ export interface PaginationData {
   totalPage: number;
 }
 
-export const loadData = (
-  page: number,
-  pageSize: number
-): Promise<PaginationData> => {
-  console.log(`Load data from page ${page}. Page size: ${pageSize}`);
-
-  const data = [];
-  const startOffset = page * pageSize;
-  for (let i = startOffset; i < startOffset + pageSize; i++) {
-    data.push({
+const makeData = (len: number): Array<any> => {
+  const res: Array<any> = [];
+  for (let i = 0; i < len; i++) {
+    res.push({
       id: i + 1,
       name: namor.generate({ words: 1, numbers: 0 }),
       info: namor.generate({ words: 4, numbers: 0 })
     });
   }
+  return res;
+};
+
+const _data = makeData(100);
+
+export const loadData = (
+  page: number,
+  pageSize: number,
+  filters: Array<any>
+): Promise<PaginationData> => {
+  // Filtering matching data
+  const matches: Array<any> = [];
+  _data.forEach(item => {
+    let isMatched = true;
+    for (let i = 0; i < filters.length; i++) {
+      const { id, value } = filters[i];
+      const itemValue = item[id];
+      console.log(itemValue, value);
+      if (!itemValue.includes(value)) {
+        isMatched = false;
+        break;
+      }
+    }
+    if (isMatched) {
+      matches.push(item);
+    }
+  });
+
+  const startOffset = page * pageSize;
+  const endOffset = startOffset + pageSize;
+  const totalPage = Math.ceil(matches.length / pageSize);
+  const data = matches.slice(startOffset, endOffset);
 
   return Promise.resolve({
     data,
-    currentPage: page,
-    totalPage: 20
+    totalPage,
+    currentPage: page
   });
 };
 

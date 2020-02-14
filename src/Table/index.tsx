@@ -12,7 +12,11 @@ const {
 
 interface Props {
   columns: Array<any>;
-  dataFn: (page: number, pageSize: number) => Promise<PaginationData>;
+  dataFn: (
+    page: number,
+    pageSize: number,
+    filter: Array<any>
+  ) => Promise<PaginationData>;
   pageSize?: number;
 }
 
@@ -28,6 +32,7 @@ const Table: React.FunctionComponent<Props> = ({
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    state,
     prepareRow,
     pageOptions,
     page,
@@ -43,6 +48,7 @@ const Table: React.FunctionComponent<Props> = ({
         pageSize: pageSize
       },
       manualPagination: true,
+      manualFilters: true, //turn it on if you wanna do server filtering
       pageCount,
       autoResetFilters: true
     },
@@ -53,11 +59,11 @@ const Table: React.FunctionComponent<Props> = ({
 
   React.useEffect(() => {
     (async () => {
-      const loadedData = await dataFn(pageIndex, pageSize!);
+      const loadedData = await dataFn(pageIndex, pageSize!, state.filters);
       setData(loadedData.data);
       setPageCount(loadedData.totalPage);
     })();
-  }, [pageIndex, pageSize, dataFn]);
+  }, [pageIndex, pageSize, state.filters, dataFn]);
 
   return (
     <>
