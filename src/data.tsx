@@ -12,8 +12,8 @@ export const columns: Array<any> = [
   },
   {
     Header: "Info",
-    Filter: TextFilter,
-    filter: "fuzzy", // you can select `fuzzy` filter or `prefix` filter
+    Filter: TextFilter, // this will specify which component to render
+    filter: "fuzzy", // this will specify which filter function you should use. You can select `fuzzy` filter or `prefix` filter
     accessor: "info"
   }
 ];
