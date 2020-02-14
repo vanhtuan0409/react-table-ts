@@ -1,6 +1,6 @@
 import namor from "namor";
 
-export const columns: Array<object> = [
+export const columns: Array<any> = [
   {
     Header: "ID",
     accessor: "id"
@@ -15,7 +15,7 @@ export const columns: Array<object> = [
   }
 ];
 
-export const makeData = (len: number): Array<object> => {
+export const makeData = (len: number): Array<any> => {
   const res = [];
   for (let i = 0; i < len; i++) {
     res.push({

@@ -1,10 +1,11 @@
 import React from "react";
 import TableHeaders from "./TableHeaders";
+import TableRow from "./TableRow";
 const { useTable } = require("react-table");
 
 interface Props {
-  columns: Array<object>;
-  data: Array<object>;
+  columns: Array<any>;
+  data: Array<any>;
 }
 
 const Table: React.FunctionComponent<Props> = ({ columns, data }) => {
@@ -25,13 +26,7 @@ const Table: React.FunctionComponent<Props> = ({ columns, data }) => {
       <tbody {...getTableBodyProps()}>
         {rows.map((row: any) => {
           prepareRow(row);
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell: any) => (
-                <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-              ))}
-            </tr>
-          );
+          return <TableRow data={row} />;
         })}
       </tbody>
     </table>
