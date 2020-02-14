@@ -2,8 +2,12 @@ import React from "react";
 import TableHeaders from "./TableHeaders";
 import TableRow from "./TableRow";
 import Pagination from "./Pagination";
-import { prefixFilterFn, fuzzyFilterFn } from "./filters/TextFilter";
-const { useTable, useFilters, usePagination } = require("react-table");
+const {
+  useTable,
+  useFilters,
+  usePagination,
+  useSortBy
+} = require("react-table");
 
 interface Props {
   columns: Array<any>;
@@ -12,14 +16,6 @@ interface Props {
 }
 
 const Table: React.FunctionComponent<Props> = ({ columns, data, pageSize }) => {
-  const filterTypes = React.useMemo(
-    () => ({
-      prefix: prefixFilterFn,
-      fuzzy: fuzzyFilterFn
-    }),
-    []
-  );
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -37,10 +33,10 @@ const Table: React.FunctionComponent<Props> = ({ columns, data, pageSize }) => {
       },
       columns,
       data,
-      filterTypes,
       autoResetFilters: true
     },
     useFilters,
+    useSortBy,
     usePagination
   );
 

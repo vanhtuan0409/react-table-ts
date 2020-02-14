@@ -1,19 +1,22 @@
 import namor from "namor";
-import TextFilter from "./Table/filters/TextFilter";
+import TextFilter, { fuzzyFilterFn } from "./Table/filters/TextFilter";
 
 export const columns: Array<any> = [
   {
     Header: "ID",
-    accessor: "id"
+    accessor: "id",
+    disableSortBy: true,
+    disableFilters: true
   },
   {
     Header: "Name",
-    accessor: "name"
+    accessor: "name",
+    disableFilters: true
   },
   {
     Header: "Info",
     Filter: TextFilter, // this will specify which component to render
-    filter: "fuzzy", // this will specify which filter function you should use. You can select `fuzzy` filter or `prefix` filter
+    filter: fuzzyFilterFn, // this will specify which filter function you should use. You can select `fuzzy` filter or `prefix` filter
     accessor: "info"
   }
 ];

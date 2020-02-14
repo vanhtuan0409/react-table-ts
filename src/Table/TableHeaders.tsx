@@ -11,8 +11,9 @@ const TableHeader: React.FunctionComponent<Props> = ({ groups }) => {
       {groups.map(group => (
         <tr {...group.getHeaderGroupProps()}>
           {group.headers.map((column: any) => (
-            <th {...column.getHeaderProps()}>
-              {column.render("Header")}
+            <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+              {column.render("Header")}{" "}
+              {column.isSorted ? (column.isSortedDesc ? "^" : "V") : ""}
               {column.canFilter && column["Filter"] && (
                 <div>{column.render("Filter")}</div>
               )}
