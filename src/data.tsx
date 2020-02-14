@@ -1,4 +1,5 @@
 import namor from "namor";
+import TextFilter from "./Table/filters/TextFilter";
 
 export const columns: Array<any> = [
   {
@@ -11,6 +12,8 @@ export const columns: Array<any> = [
   },
   {
     Header: "Info",
+    Filter: TextFilter,
+    filter: "fuzzy", // you can select `fuzzy` filter or `prefix` filter
     accessor: "info"
   }
 ];

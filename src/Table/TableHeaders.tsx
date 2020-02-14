@@ -11,7 +11,12 @@ const TableHeader: React.FunctionComponent<Props> = ({ groups }) => {
       {groups.map(group => (
         <tr {...group.getHeaderGroupProps()}>
           {group.headers.map((column: any) => (
-            <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+            <th {...column.getHeaderProps()}>
+              {column.render("Header")}
+              {column.canFilter && column["Filter"] && (
+                <div>{column.render("Filter")}</div>
+              )}
+            </th>
           ))}
         </tr>
       ))}

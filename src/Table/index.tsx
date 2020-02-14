@@ -1,7 +1,8 @@
 import React from "react";
 import TableHeaders from "./TableHeaders";
 import TableRow from "./TableRow";
-const { useTable } = require("react-table");
+import { prefixFilterFn, fuzzyFilterFn } from "./filters/TextFilter";
+const { useTable, useFilters } = require("react-table");
 
 interface Props {
   columns: Array<any>;
@@ -9,24 +10,37 @@ interface Props {
 }
 
 const Table: React.FunctionComponent<Props> = ({ columns, data }) => {
+  const filterTypes = React.useMemo(
+    () => ({
+      prefix: prefixFilterFn,
+      fuzzy: fuzzyFilterFn
+    }),
+    []
+  );
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow
-  } = useTable({
-    columns,
-    data
-  });
+  } = useTable(
+    {
+      columns,
+      data,
+      filterTypes,
+      autoResetFilters: true
+    },
+    useFilters
+  );
 
   return (
     <table {...getTableProps()}>
       <TableHeaders groups={headerGroups} />
       <tbody {...getTableBodyProps()}>
-        {rows.map((row: any) => {
+        {rows.map((row: any, index: number) => {
           prepareRow(row);
-          return <TableRow data={row} />;
+          return <TableRow key={index} data={row} />;
         })}
       </tbody>
     </table>

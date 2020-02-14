@@ -9,11 +9,12 @@ interface Props {
 
 const App: React.FunctionComponent<Props> = ({ title }) => {
   const memoColumns = React.useMemo(() => columns, []);
-  const data = React.useMemo(() => makeData(20), []);
+  const memoData = React.useMemo(() => makeData(20), []);
+
   return (
     <div>
       <p>{title}</p>
-      <Table columns={memoColumns} data={data} />
+      <Table columns={memoColumns} data={memoData} />
     </div>
   );
 };
