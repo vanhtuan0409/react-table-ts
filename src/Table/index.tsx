@@ -2,6 +2,7 @@ import React from "react";
 import TableHeaders from "./TableHeaders";
 import TableRow from "./TableRow";
 import Pagination from "./Pagination";
+import { PaginationData } from "../data";
 const {
   useTable,
   useFilters,
@@ -11,11 +12,18 @@ const {
 
 interface Props {
   columns: Array<any>;
-  data: Array<any>;
+  dataFn: (page: number, pageSize: number) => Promise<PaginationData>;
   pageSize?: number;
 }
 
-const Table: React.FunctionComponent<Props> = ({ columns, data, pageSize }) => {
+const Table: React.FunctionComponent<Props> = ({
+  columns,
+  pageSize,
+  dataFn
+}) => {
+  const [data, setData] = React.useState<Array<any>>([]);
+  const [pageCount, setPageCount] = React.useState(0);
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -28,17 +36,28 @@ const Table: React.FunctionComponent<Props> = ({ columns, data, pageSize }) => {
     nextPage
   } = useTable(
     {
-      initialState: {
-        pageSize: pageSize
-      },
       columns,
       data,
+      initialState: {
+        pageIndex: 0,
+        pageSize: pageSize
+      },
+      manualPagination: true,
+      pageCount,
       autoResetFilters: true
     },
     useFilters,
     useSortBy,
     usePagination
   );
+
+  React.useEffect(() => {
+    (async () => {
+      const loadedData = await dataFn(pageIndex, pageSize!);
+      setData(loadedData.data);
+      setPageCount(loadedData.totalPage);
+    })();
+  }, [pageIndex, pageSize, dataFn]);
 
   return (
     <>

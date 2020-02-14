@@ -21,14 +21,32 @@ export const columns: Array<any> = [
   }
 ];
 
-export const makeData = (len: number): Array<any> => {
-  const res = [];
-  for (let i = 0; i < len; i++) {
-    res.push({
+export interface PaginationData {
+  data: Array<any>;
+  currentPage: number;
+  totalPage: number;
+}
+
+export const loadData = (
+  page: number,
+  pageSize: number
+): Promise<PaginationData> => {
+  console.log(`Load data from page ${page}. Page size: ${pageSize}`);
+
+  const data = [];
+  const startOffset = page * pageSize;
+  for (let i = startOffset; i < startOffset + pageSize; i++) {
+    data.push({
       id: i + 1,
       name: namor.generate({ words: 1, numbers: 0 }),
       info: namor.generate({ words: 4, numbers: 0 })
     });
   }
-  return res;
+
+  return Promise.resolve({
+    data,
+    currentPage: page,
+    totalPage: 20
+  });
 };
+
