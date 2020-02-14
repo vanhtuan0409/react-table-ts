@@ -24,7 +24,6 @@ const Table: React.FunctionComponent<Props> = ({ columns, data, pageSize }) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     prepareRow,
     pageOptions,
     page,
