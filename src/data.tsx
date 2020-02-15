@@ -44,8 +44,12 @@ const _data = makeData(100);
 export const loadData = (
   page: number,
   pageSize: number,
-  filters: Array<any>
+  filters: Array<any>,
+  sortBy: Array<any>
 ): Promise<PaginationData> => {
+  console.log(
+    `Loading data for page ${page}, pageSize: ${pageSize}, filters: ${filters}, sortBy ${sortBy}`
+  );
   // Filtering matching data
   const matches: Array<any> = [];
   _data.forEach(item => {
@@ -53,7 +57,6 @@ export const loadData = (
     for (let i = 0; i < filters.length; i++) {
       const { id, value } = filters[i];
       const itemValue = item[id];
-      console.log(itemValue, value);
       if (!itemValue.includes(value)) {
         isMatched = false;
         break;

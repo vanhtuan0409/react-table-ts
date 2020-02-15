@@ -15,7 +15,8 @@ interface Props {
   dataFn: (
     page: number,
     pageSize: number,
-    filter: Array<any>
+    filter: Array<any>,
+    sortBy: Array<any>
   ) => Promise<PaginationData>;
   pageSize?: number;
 }
@@ -28,6 +29,24 @@ const Table: React.FunctionComponent<Props> = ({
   const [data, setData] = React.useState<Array<any>>([]);
   const [pageCount, setPageCount] = React.useState(0);
 
+  const instance = useTable(
+    {
+      columns,
+      data,
+      initialState: {
+        pageIndex: 0,
+        pageSize: pageSize
+      },
+      manualSortBy: true,
+      manualPagination: true,
+      manualFilters: true, //turn it on if you wanna do server filtering
+      pageCount,
+      autoResetFilters: true
+    },
+    useFilters,
+    useSortBy,
+    usePagination
+  );
   const {
     getTableProps,
     getTableBodyProps,
@@ -39,31 +58,20 @@ const Table: React.FunctionComponent<Props> = ({
     state: { pageIndex },
     previousPage,
     nextPage
-  } = useTable(
-    {
-      columns,
-      data,
-      initialState: {
-        pageIndex: 0,
-        pageSize: pageSize
-      },
-      manualPagination: true,
-      manualFilters: true, //turn it on if you wanna do server filtering
-      pageCount,
-      autoResetFilters: true
-    },
-    useFilters,
-    useSortBy,
-    usePagination
-  );
+  } = instance;
 
   React.useEffect(() => {
     (async () => {
-      const loadedData = await dataFn(pageIndex, pageSize!, state.filters);
+      const loadedData = await dataFn(
+        pageIndex,
+        pageSize!,
+        state.filters,
+        state.sortBy
+      );
       setData(loadedData.data);
       setPageCount(loadedData.totalPage);
     })();
-  }, [pageIndex, pageSize, state.filters, dataFn]);
+  }, [pageIndex, pageSize, state.filters, state.sortBy, dataFn]);
 
   return (
     <>
